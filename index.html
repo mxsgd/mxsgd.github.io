@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maks Szygenda</title>
+<meta name="description" content="Maks Szygenda: data and analytics engineer, game developer. Projects and experience.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --card: #121212;
+    --fg: #ededed;
+    --muted: #9a9a9a;
+    --line: #242424;
+    --line-hover: #3d3d3d;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    font: 16px/1.6 "Geist", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    max-width: 74rem;
+    margin: 0 auto;
+    padding: 7rem 1.25rem 4rem;
+    -webkit-font-smoothing: antialiased;
+  }
+  #bg { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+  a { color: inherit; text-decoration-color: var(--line-hover); text-underline-offset: 3px; }
+  a:hover { text-decoration-color: currentColor; }
+
+  header { display: flex; align-items: center; gap: 2.25rem; }
+  header img { width: 168px; height: 168px; border-radius: 50%; flex-shrink: 0; border: 1px solid var(--line); }
+  h1 { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.02em; }
+  header p { color: var(--muted); margin-top: .9rem; max-width: 34rem; }
+  header .title { font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; margin-top: .25rem; }
+  nav { display: flex; flex-wrap: wrap; gap: 1.25rem; margin-top: .9rem; font-size: .9rem; }
+
+  .label, .title, .year, .stack li, .demo, .skills dt { font-family: "Geist Mono", ui-monospace, monospace; }
+  .label {
+    font-size: .75rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted); margin: 5.5rem 0 1.25rem;
+  }
+
+  /* cards: projects (2 per row) and jobs (full width) */
+  .projects, .jobs { list-style: none; padding: 0; display: grid; gap: 1rem; }
+  .projects { grid-template-columns: repeat(2, 1fr); gap: 2.5rem; }
+  .projects > li, .jobs > li {
+    position: relative;
+    display: flex; flex-direction: column;
+    padding: 1.75rem;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    transition: border-color .15s;
+  }
+  .projects > li:has(h3 a):hover { border-color: var(--line-hover); }
+  .year { font-size: .75rem; color: var(--muted); }
+  h3 { font-size: 1.05rem; font-weight: 500; letter-spacing: -0.01em; margin-top: .5rem; }
+  h3 a { text-decoration: none; }
+  h3 a::after { content: "↗" / ""; margin-left: .3em; color: var(--muted); }
+  h3 a:first-child::before { content: ""; position: absolute; inset: 0; border-radius: inherit; }  /* whole card clickable */
+  .demo { position: relative; font-size: .75rem; font-weight: 400; color: var(--muted); margin-left: .75rem; }
+  .demo:hover { color: var(--fg); }
+  .projects p { color: var(--muted); font-size: .94rem; margin: .4rem 0 1.25rem; }
+
+  .job-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: .25rem 1rem; }
+  .job-head h3 { margin: 0; }
+  .role { color: var(--muted); font-size: .94rem; }
+  .points { padding-left: 1.1rem; color: var(--muted); font-size: .94rem; margin: .9rem 0 1.25rem; max-width: 46rem; }
+  .points li + li { margin-top: .3rem; }
+  .points li::marker { color: var(--line-hover); }
+
+  .stack { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: .375rem; margin-top: auto; }
+  .stack li {
+    font-size: .72rem; line-height: 1;
+    padding: .4rem .55rem;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    color: var(--muted);
+  }
+  /* category colours: tags get data-cat from the Stack section (script at the bottom) */
+  [data-cat=data]      { --c: #7da5ff; }
+  [data-cat=backend]   { --c: #b69cff; }
+  [data-cat=practices] { --c: #5fd4a6; }
+  [data-cat=games]     { --c: #f0b45a; }
+  [data-cat=tools]     { --c: #ff8f7a; }
+  .stack li[data-cat] {
+    color: var(--c);
+    border-color: color-mix(in srgb, var(--c) 35%, transparent);
+    background: color-mix(in srgb, var(--c) 8%, transparent);
+  }
+  .skills dt[data-cat]::before {
+    content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--c); margin-right: .6rem; vertical-align: 1px;
+  }
+
+  .skills { display: grid; grid-template-columns: 11rem 1fr; gap: 1rem 1.5rem; align-items: baseline; }
+  .skills dt { font-size: .75rem; color: var(--muted); }
+  .skills dd { margin: 0; }
+
+  footer { margin-top: 6rem; font-size: .8rem; color: var(--muted); }
+
+  @media (max-width: 720px) {
+    body { padding-top: 3.5rem; }
+    .projects { grid-template-columns: 1fr; }
+    .skills { grid-template-columns: 1fr; gap: .4rem; }
+    .skills dd { margin-bottom: .9rem; }
+  }
+  @media (max-width: 480px) {
+    header { flex-direction: column; align-items: flex-start; gap: 1.25rem; }
+    header img { width: 128px; height: 128px; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="bg" aria-hidden="true"></canvas>
+
+<header>
+  <img src="photo.jpg" alt="" width="168" height="168">
+  <div>
+    <h1>Maks Szygenda</h1>
+    <p class="title">Data Engineer / Analytics Engineer</p>
+    <p>Computer science engineer, graduated from Adam Mickiewicz University in Poznań. I build data pipelines, analytics tools, and develop games as a hobby.</p>
+    <nav>
+      <a href="https://github.com/mxsgd">GitHub</a>
+      <a href="https://www.linkedin.com/in/maksymilian-szygenda-6271a5196/">LinkedIn</a>
+      <a href="mailto:maksszygenda@gmail.com">Email</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <h2 class="label">Selected work</h2>
+
+  <!-- Newest first. Copy one <li> block per project. -->
+  <ol class="projects">
+    <li>
+      <span class="year">2026</span>
+      <h3><a href="https://github.com/mxsgd/BI_Shoper">BI Shoper</a><a class="demo" href="https://mxsgd.github.io/BI_Shoper/">Live demo</a></h3>
+      <p>End-to-end ELT platform for Shoper stores: incremental ingestion from the Shoper API and GA4 into PostgreSQL RAW → CORE layers, dbt models tested in CI, and revenue, cohort, RFM and funnel metrics served via FastAPI to React dashboards.</p>
+      <ul class="stack"><li>Python</li><li>FastAPI</li><li>PostgreSQL</li><li>SQLAlchemy</li><li>Alembic</li><li>dbt</li><li>React</li><li>TypeScript</li><li>GitHub Actions</li></ul>
+    </li>
+    <li>
+      <span class="year">2026</span>
+      <h3><a href="https://github.com/mxsgd/obsidian-health-stack">Obsidian Health Stack</a></h3>
+      <p>Food, sleep, training and mood from Obsidian notes, FatSecret and Apple Health, modeled into daily and weekly marts. Training plans are SCD2 snapshots, so each day is judged against the plan active at the time. In progress.</p>
+      <ul class="stack"><li>Python</li><li>dbt</li><li>DuckDB</li><li>SQL</li><li>Obsidian</li></ul>
+    </li>
+    <li>
+      <span class="year">2025</span>
+      <h3><a href="https://github.com/mxsgd/Puzzles_of_the_Forest">Puzzles of the Forest</a></h3>
+      <p>Solo-developed hex tile-placement puzzle game, currently in alpha. Draw from a fixed deck, shape regions into animal habitats, draft perks mid-run. Code, models and art are all my own.</p>
+      <ul class="stack"><li>Unity 6</li><li>C#</li><li>URP</li><li>Input System</li></ul>
+    </li>
+    <li>
+      <span class="year">2024</span>
+      <h3>Knowla</h3>
+      <p>Motion-controlled educational games for an interactive board, built as my engineering thesis. Real-time pose and gesture recognition with MediaPipe, streamed to Unity over UDP. One of the games was deployed in a real educational setting.</p>
+      <ul class="stack"><li>Unity</li><li>C#</li><li>Python</li><li>MediaPipe</li><li>UDP</li></ul>
+    </li>
+    <li>
+      <span class="year">2024</span>
+      <h3><a href="https://github.com/mxsgd/Stock_Prediction">Stock Prediction</a></h3>
+      <p>Neural network that classifies a stock's next-month return into four bands, trained on S&amp;P 500 history enriched with technical indicators and rolling factor regressions.</p>
+      <ul class="stack"><li>Python</li><li>Keras</li><li>pandas</li><li>scikit-learn</li><li>statsmodels</li><li>yfinance</li></ul>
+    </li>
+    <li>
+      <span class="year">2024</span>
+      <h3><a href="https://github.com/mxsgd/corpus_English_Croatian">English–Croatian Corpus</a></h3>
+      <p>Sentence-aligned parallel corpus built from bilingual user manuals: PDF text extraction, cleanup, and alignment of matching sentences.</p>
+      <ul class="stack"><li>Python</li><li>NLTK</li><li>spaCy</li><li>pdfplumber</li><li>Jupyter</li></ul>
+    </li>
+    <li>
+      <span class="year">2023</span>
+      <h3><a href="https://github.com/mxsgd/Review_Sentiment_Analysis">Review Sentiment Analysis</a></h3>
+      <p>Scrapes Goodreads reviews and predicts a review's star rating from its text with a regression model.</p>
+      <ul class="stack"><li>Python</li><li>scikit-learn</li><li>spaCy</li><li>BeautifulSoup</li></ul>
+    </li>
+  </ol>
+
+  <h2 class="label">Experience</h2>
+
+  <ol class="jobs">
+    <li>
+      <div class="job-head">
+        <h3>Volkswagen Poznań</h3>
+        <span class="year">03.2024 – 08.2026</span>
+      </div>
+      <p class="role">Data Analyst</p>
+      <ul class="points">
+        <li>Built and maintained the data model behind a 16-page Power BI HR reporting suite (headcount, turnover, retirement forecasting) covering ~9,000 employees.</li>
+        <li>Turned monthly SAP and SharePoint extracts, hundreds of thousands of records per refresh, into validated, analysis-ready datasets.</li>
+        <li>Redesigned the model into a star schema and optimized transformation logic, cutting dashboard load time from ~1 min to under 5 s.</li>
+        <li>Introduced validation checks, QA procedures and naming conventions that made KPI definitions consistent across reports.</li>
+        <li>Automated monthly report distribution with VBA and Power BI, and worked with ~30 HR and management stakeholders to turn requirements into clear metric definitions.</li>
+      </ul>
+      <ul class="stack"><li>Power BI</li><li>DAX</li><li>Power Query</li><li>SAP</li><li>SharePoint</li><li>VBA</li></ul>
+    </li>
+    <li>
+      <div class="job-head">
+        <h3>Decorator</h3>
+        <span class="year">10.2022 – 03.2024</span>
+      </div>
+      <p class="role">E-commerce Solutions Developer</p>
+      <ul class="points">
+        <li>Automated product mapping and pricing workflows with Python and API integrations.</li>
+        <li>Built a locally hosted app giving the business owners dashboards, management tools and sales insights (backend, frontend and database).</li>
+        <li>Developed and maintained e-commerce web solutions in PHP, HTML and CSS.</li>
+      </ul>
+      <ul class="stack"><li>Python</li><li>REST APIs</li><li>PHP</li><li>HTML</li><li>CSS</li></ul>
+    </li>
+  </ol>
+
+  <h2 class="label">Stack</h2>
+
+  <dl class="skills">
+    <dt data-cat="data">Data &amp; BI</dt>
+    <dd><ul class="stack"><li>SQL</li><li>PostgreSQL</li><li>dbt</li><li>DuckDB</li><li>Power BI</li><li>DAX</li><li>Power Query</li></ul></dd>
+    <dt data-cat="backend">Pipelines &amp; backend</dt>
+    <dd><ul class="stack"><li>Python</li><li>FastAPI</li><li>SQLAlchemy</li><li>REST APIs</li><li>Job scheduling</li></ul></dd>
+    <dt data-cat="practices">Practices</dt>
+    <dd><ul class="stack"><li>ELT pipeline design</li><li>Dimensional modeling</li><li>Incremental ingestion</li><li>Data quality testing</li><li>Metric governance</li></ul></dd>
+    <dt data-cat="games">Games</dt>
+    <dd><ul class="stack"><li>Unity</li><li>C#</li><li>MediaPipe</li></ul></dd>
+    <dt data-cat="tools">Tools</dt>
+    <dd><ul class="stack"><li>Git</li><li>CI/CD</li><li>GitHub Actions</li><li>SAP</li><li>Jira</li><li>GA4</li></ul></dd>
+    <dt>Languages</dt>
+    <dd><ul class="stack"><li>Polish · native</li><li>English · advanced</li></ul></dd>
+  </dl>
+</main>
+
+<footer>© 2026 Maks Szygenda</footer>
+
+<script>
+// Colour every tech tag by its category in the Stack section.
+// Tags that aren't listed there get their category from this table.
+(() => {
+  const cat = {
+    'Alembic': 'data', 'pandas': 'data', 'Jupyter': 'data', 'scikit-learn': 'data', 'statsmodels': 'data',
+    'Keras': 'data', 'yfinance': 'data', 'NLTK': 'data', 'spaCy': 'data', 'pdfplumber': 'data',
+    'React': 'backend', 'TypeScript': 'backend', 'PHP': 'backend', 'HTML': 'backend', 'CSS': 'backend', 'BeautifulSoup': 'backend',
+    'Unity 6': 'games', 'URP': 'games', 'Input System': 'games', 'UDP': 'games',
+    'SharePoint': 'tools', 'VBA': 'tools', 'Obsidian': 'tools',
+  };
+  for (const dt of document.querySelectorAll('.skills dt[data-cat]'))
+    for (const li of dt.nextElementSibling.querySelectorAll('li')) cat[li.textContent] = dt.dataset.cat;
+  for (const li of document.querySelectorAll('.stack li')) if (cat[li.textContent]) li.dataset.cat = cat[li.textContent];
+})();
+</script>
+
+<script>
+(() => {
+  const canvas = document.getElementById('bg');
+  const ctx = canvas.getContext('2d');
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Tuning knobs
+  const LINK = 300;            // px: nodes closer than this are connected
+  const NODE_SPEED = 5;        // px/s: nodes drift with the field
+  const HIT = 3;               // px: a node drifting this close to a data point pings
+  const INK = 'rgb(237,237,237)';
+  const PALETTE = [...document.querySelectorAll('.skills dt[data-cat]')].map(dt => getComputedStyle(dt).getPropertyValue('--c').trim());  // Stack category colours
+
+  const rand = (a, b) => a + Math.random() * (b - a);
+  let W = 0, H = 0, nodes = [], points = [];
+
+  // Transformation: ψ(x, y, t) is a sum of slow, low-frequency travelling waves.
+  // Nodes move along its curl (∂ψ/∂y, −∂ψ/∂x), which is divergence-free,
+  // so they swirl without piling up anywhere.
+  const waves = Array.from({ length: 5 }, () => {
+    const k = rand(0.005, 0.013), dir = rand(0, 2 * Math.PI);
+    return { kx: k * Math.cos(dir), ky: k * Math.sin(dir), amp: 1 / (k * 1.6), w: rand(-0.12, 0.12), p: rand(0, 2 * Math.PI) };
+  });
+  function flow(x, y, t) {
+    let vx = 0, vy = 0;
+    for (const s of waves) {
+      const c = s.amp * Math.cos(s.kx * x + s.ky * y + s.w * t + s.p);  // ∇ψ = c·(kx, ky)
+      vx += c * s.ky;
+      vy -= c * s.kx;
+    }
+    return [vx, vy];  // ≈ unit RMS speed
+  }
+
+  // Data: invisible points that sit at a random spot for a few seconds, then move elsewhere
+  const spawn = p => Object.assign(p || {}, { x: rand(0, W), y: rand(0, H), age: 0, life: rand(3, 8) });
+  const wrap = (v, max) => v < -LINK ? v + max + 2 * LINK : v > max + LINK ? v - max - 2 * LINK : v;
+
+  function resize() {
+    const widthChanged = innerWidth !== W;
+    W = innerWidth; H = innerHeight;
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (widthChanged) {  // mobile URL bar only changes height; don't reseed while scrolling
+      const area = (W + 2 * LINK) * (H + 2 * LINK);
+      nodes = Array.from({ length: Math.round(area / 18000) }, () => ({ x: rand(-LINK, W + LINK), y: rand(-LINK, H + LINK), e: 0, c: PALETTE[Math.floor(Math.random() * PALETTE.length)] }));
+      points = Array.from({ length: Math.round(W * H / 6000) }, () => spawn());
+    }
+    if (still) draw();
+  }
+
+  function step(dt, t) {
+    for (const n of nodes) {
+      const [vx, vy] = flow(n.x, n.y, t);
+      n.x = wrap(n.x + vx * NODE_SPEED * dt, W);
+      n.y = wrap(n.y + vy * NODE_SPEED * dt, H);
+      n.e *= Math.exp(-1.5 * dt);
+    }
+    for (const p of points) {
+      if ((p.age += dt) > p.life) { spawn(p); continue; }
+      for (const n of nodes) if (Math.abs(n.x - p.x) < HIT && Math.abs(n.y - p.y) < HIT) n.e = 1;
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    ctx.lineWidth = 1;
+
+    // Connections: nearby nodes link up; links brighten while data passes through
+    // ponytail: O(n²) pair scan, fine for ~200 nodes; spatial grid if density goes up
+    ctx.strokeStyle = INK;
+    for (let i = 0; i < nodes.length; i++) {
+      const a = nodes[i];
+      for (let j = i + 1; j < nodes.length; j++) {
+        const b = nodes[j], dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy;
+        if (d2 > LINK * LINK) continue;
+        ctx.globalAlpha = (1 - Math.sqrt(d2) / LINK) * (0.09 + 0.3 * Math.max(a.e, b.e));
+        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+      }
+    }
+    for (const n of nodes) {
+      ctx.fillStyle = n.c;
+      ctx.globalAlpha = 0.25 + 0.6 * n.e;
+      ctx.beginPath(); ctx.arc(n.x, n.y, 1.4, 0, 2 * Math.PI); ctx.fill();
+      if (n.e > 0.03) {  // expanding ping when data passes through
+        ctx.strokeStyle = n.c;
+        ctx.globalAlpha = 0.5 * n.e;
+        ctx.beginPath(); ctx.arc(n.x, n.y, 2 + 10 * (1 - n.e), 0, 2 * Math.PI); ctx.stroke();
+      }
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  let t = rand(0, 1000), last = performance.now();
+  function frame(now) {
+    const dt = Math.min((now - last) / 1000, 0.05);  // clamp after background-tab pauses
+    last = now; t += dt;
+    step(dt, t); draw();
+    requestAnimationFrame(frame);
+  }
+
+  resize();
+  addEventListener('resize', resize);
+  if (still) { for (let i = 0; i < 120; i++) step(1 / 30, t += 1 / 30); draw(); }  // reduced motion: one static frame
+  else requestAnimationFrame(frame);
+})();
+</script>
+
+</body>
+</html>
